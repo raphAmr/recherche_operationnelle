@@ -12,6 +12,8 @@ while running:
         fichier = int(input("Veuillez entre le numéro de fichier à travailler : "))
     if fichier == 0:
         running = False
+        
     else:
         matrice = fct.lecture(fichier)
-    
+        fct.affichage_matrices_capacités(matrice)
+        fct.affichage_matrices_couts(matrice)
