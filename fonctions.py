@@ -20,3 +20,11 @@ def affichage_matrices_capacités(matrice):
 #output : 
 def affichage_matrices_couts(matrice):
     pass
+
+
+#input
+#
+#output :
+def parcours_largeur():
+    pass
+            
