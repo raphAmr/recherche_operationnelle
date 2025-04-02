@@ -5,21 +5,12 @@ class Sommet:
         self.nom = nom
         self.successeurs = {}  # Dictionnaire {sommet: capacité}
         self.predecesseurs = {}  # Dictionnaire {sommet: capacité}
-        
     
     def ajouter_successeur(self, sommet, capacite):
         self.successeurs[sommet] = capacite
         sommet.predecesseurs[self] = capacite  # Lier bidirectionnellement
         
-class Sommet:
-    def __init__(self, nom):
-        self.nom = nom
-        self.successeurs = {}  # Dictionnaire {sommet: capacité}
-        self.predecesseurs = {}  # Dictionnaire {sommet: capacité}
-    
-    def ajouter_successeur(self, sommet, capacite):
-        self.successeurs[sommet] = capacite
-        sommet.predecesseurs[self] = capacite  # Lier bidirectionnellement
+
 
 class Graphe:
     def __init__(self):
@@ -39,23 +30,9 @@ class Graphe:
             print(f"  Successeurs: {[(s.nom, c) for s, c in sommet.successeurs.items()]}")
             print(f"  Prédécesseurs: {[(s.nom, c) for s, c in sommet.predecesseurs.items()]}\n")
 
-"""
-# Exemple d'utilisation
-graphe = Graphe()
-graphe.ajouter_sommet("A")
-graphe.ajouter_sommet("B")
-graphe.ajouter_sommet("C")
-
-graphe.ajouter_arete("A", "B", 10)
-graphe.ajouter_arete("B", "C", 5)
-
-graphe.afficher()
-"""
 
 def afficher_matrice(graphe):
     sommets = list(graphe.sommets.keys())
-    
-    #print("    " + " ".join(f"{s}  " for s in sommets))
     print ("     ", end="")
     for elem in sommets:
         print (elem + "   ", end="")
@@ -67,16 +44,75 @@ def afficher_matrice(graphe):
             print(f"{val:3} ", end="")
         print()
 
+
+def parcours_largeur(graphe):
+    file, visite = ["S"], ["S"]
+    liste_sommets = list(graphe.sommets.keys())
+    #--------------------------------PARCOURS EN LARGEUR-------------------------------------------
+    while "T" not in file:
+        sommet = file[0]
+        for voisin in graphe.sommets[sommet].successeurs:
+            if voisin.nom not in visite:
+                file.append(voisin.nom)
+                visite.append(voisin.nom)
+        file.remove(sommet)
+    print (f"Parcours en largeur : {visite} \nDernier point parcouru : {sommet}")
+    
+    chaine_ameliore = ["T"]
+    chaine_ameliore.insert(0, sommet)
+    #if graphe.sommets["A"] in graphe.sommets["C"].predecesseurs:
+    #    print("success")
+
+    #--------------------------------CHAINE AMELIORANTE--------------------------------------------
+    while chaine_ameliore[0] != "S":
+        #print (chaine_ameliore)
+        for elem in visite:
+            if graphe.sommets[elem] in graphe.sommets[sommet].predecesseurs:
+                chaine_ameliore.insert(0, elem)
+                sommet = elem
+                break
+    print (f"Chaine améliorante : {chaine_ameliore}")
+            
+
+            
+"""-------------------------------------------------------------------------------------------------------------------------------"""
+"""--------------------------------------------------------GRAPHE NUMERO 1---------------------------------------------------------"""
+"""-------------------------------------------------------------------------------------------------------------------------------"""
 # Création du graphe
 graphe = Graphe()
-for sommet in ["A", "B", "C", "D", "E", "F"]:
+for sommet in ["S", "A", "B", "C", "D", "T"]:
     graphe.ajouter_sommet(sommet)
 
-graphe.ajouter_arete("A", "B", 10)
-graphe.ajouter_arete("A", "C", 5)
-graphe.ajouter_arete("B", "C", 2)
-graphe.ajouter_arete("B", "D", 8)
-graphe.ajouter_arete("C", "D", 3)
+graphe.ajouter_arete("S", "A", 7)
+graphe.ajouter_arete("S", "B", 4)
+graphe.ajouter_arete("A", "C", 1)
+graphe.ajouter_arete("A", "D", 8)
+graphe.ajouter_arete("B", "D", 4)
+graphe.ajouter_arete("C", "T", 1)
+graphe.ajouter_arete("D", "T", 8)
+
 
 # Affichage de la matrice
 afficher_matrice(graphe)
+parcours_largeur(graphe)
+
+"""-------------------------------------------------------------------------------------------------------------------------------"""
+"""--------------------------------------------------------GRAPHE NUMERO 2---------------------------------------------------------"""
+"""-------------------------------------------------------------------------------------------------------------------------------"""
+
+graphe_round_2 = Graphe()
+for sommet in ["S", "A", "B", "C", "D", "T"]:
+    graphe_round_2.ajouter_sommet(sommet)
+
+graphe_round_2.ajouter_arete("S", "A", 6)
+graphe_round_2.ajouter_arete("S", "B", 4)
+graphe_round_2.ajouter_arete("A", "S", 1)
+graphe_round_2.ajouter_arete("A", "D", 8)
+graphe_round_2.ajouter_arete("B", "D", 4)
+graphe_round_2.ajouter_arete("C", "A", 1)
+graphe_round_2.ajouter_arete("D", "T", 8)
+
+
+# Affichage de la matrice
+afficher_matrice(graphe_round_2)
+parcours_largeur(graphe_round_2)
