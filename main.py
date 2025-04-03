@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import fonctions as fct
-
+from graphe import Graphe, Sommet
 
 
 print ("-----------------Bienvenu sur le projet de recherche opérationnelle.---------------------------------")
@@ -15,7 +15,9 @@ while running:
         running = False
         
     else:
-        matrice = fct.lecture(fichier)
+        fichier = "data/prop_test.txt"
+        graphe = fct.lecture(fichier)
+        """
         fct.affichage_matrices_capacités(matrice)
         fct.affichage_matrices_couts(matrice)
         if fct.probleme_flot_min(matrice):
@@ -27,5 +29,12 @@ while running:
             pass
         else:
             pass
+        """
+        while graphe.sommets["T"].predecesseurs:
+            fct.afficher_matrice(graphe)
+            chaine_graph_amelio = fct.detect_chaine_amelio(graphe)
+            value_arc_minimum = fct.find_value_min(chaine_graph_amelio, graphe)
+            fct.update_graphe(graphe, chaine_graph_amelio, value_arc_minimum)
+        fct.afficher_matrice(graphe)
         
-        print ("Valeur du flot " + methode + " = ")
+        #print ("Valeur du flot " + methode + " = ")
