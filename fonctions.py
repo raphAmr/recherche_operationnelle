@@ -10,10 +10,12 @@ def lecture(path):
     with open(path, 'r') as fichier:
         for ligne in fichier:
             ligne = ligne.strip()  # Enlève les espaces et \n
+            """
             print(f"notre ligne est {ligne} \
                   \nNotre source est {ligne[0]}\
                   \nNotre capacité est {ligne[1:-1]}\
                   \nNotre destination est {ligne[-1]}\n")
+            """
             
             source = ligne[0]
             capacite = int(ligne[1:-1])  # Correction ici
@@ -128,5 +130,79 @@ def update_graphe(graphe, ca, mini):
                 print("\ntestint value of sommet",sommet.nom)
                 break
 
+def affichage_matrice_flot_max(graphe, path):
+    new_graphe = lecture(path)
+    for sommet in graphe.sommets:
+        for smt in new_graphe:
+            if sommet == smt:
+                pass
+
+"""
+def afficher_flux_utilise(graphe_initial, graphe_modifie):
+    print("\nFlux utilisé / Capacité initiale:\n")
+    sommets = list(graphe_initial.sommets.keys())
+    largeur_colonne = 8
+    little_largeur = 4
+    
+    print(" " * little_largeur, end="")
+    for elem in sommets:
+        print(f"{elem:>{largeur_colonne}}", end="")
+    print()
+    
+    for s1 in sommets:
+        print(f"{s1:<{little_largeur}}", end="")
+        for s2 in sommets:
+            capacite_initiale = graphe_initial.sommets[s1].successeurs.get(graphe_initial.sommets[s2], 0)
+            capacite_modifiee = graphe_modifie.sommets[s1].successeurs.get(graphe_modifie.sommets[s2], 0)
+            flux_utilise = capacite_initiale - capacite_modifiee
+            if capacite_initiale > 0:
+                print(f"{flux_utilise:>2}/{capacite_initiale:<2}", end=" " * (little_largeur-2))
+            else:
+                print(f"{'0':>{largeur_colonne}}", end=" " * little_largeur)
+        print()
+"""
+def afficher_flux_utilise(graphe_initial, graphe_modifie):
+    print("\nFlux utilisé / Capacité initiale:\n")
+    sommets = list(graphe_initial.sommets.keys())
+    largeur_colonne = 8
+    little_largeur = 4
+    intermediaire_largeur = 6
+    
+    print(" " * little_largeur, end="")
+    for elem in sommets:
+        print(f"{elem}", end="")
+        print(" " * largeur_colonne, end = "")
+    print()
+    
+    for s1 in sommets:
+        #print(f"{s1:<{little_largeur}}", end="")
+        print(f"{s1}", end="")
+        print("   ", end="")
+        for s2 in sommets:
+            capacite_initiale = graphe_initial.sommets[s1].successeurs.get(graphe_initial.sommets[s2], 0)
+            capacite_modifiee = graphe_modifie.sommets[s1].successeurs.get(graphe_modifie.sommets[s2], 0)
+            flux_utilise = capacite_initiale - capacite_modifiee
+            if capacite_initiale > 0:
+                #print(f"{flux_utilise:>2}/{capacite_initiale:<2}", end=" " * (little_largeur-2))
+                print(f"{flux_utilise}/{capacite_initiale}", end="")
+                print(" "*intermediaire_largeur, end="")
+            else:
+                #print(f"{'0':>{largeur_colonne}}", end=" " * little_largeur)
+                print("0", end="")
+                print(" "*largeur_colonne, end = "")
+        print()
+
+            
 graphe = lecture("data/prop_test.txt")
+while graphe.sommets["T"].predecesseurs:
+    afficher_matrice(graphe)
+    chaine_graph_amelio = detect_chaine_amelio(graphe)
+    value_arc_minimum = find_value_min(chaine_graph_amelio, graphe)
+    update_graphe(graphe, chaine_graph_amelio, value_arc_minimum)
+graphe_ori = lecture("data/prop_test.txt")
+afficher_matrice(graphe_ori)
+print("\n\n")
 afficher_matrice(graphe)
+
+afficher_flux_utilise(graphe_ori, graphe)
+#affichage_matrice_flot_max(graphe,"data/prop_test.txt")
